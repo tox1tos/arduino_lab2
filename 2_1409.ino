@@ -114,14 +114,6 @@ void goToState(
   Serial.println(reason);
 }
 
-
-// =====================================================
-// Универсальная обработка кнопки с debounce
-//
-// Возвращает true только ОДИН раз
-// в момент нормального нажатия кнопки.
-// =====================================================
-
 bool buttonPressed(
   int pin,
   int &stableState,
@@ -133,9 +125,6 @@ bool buttonPressed(
 
   int reading = digitalRead(pin);
 
-
-  // Если физическое состояние изменилось
-
   if (reading != lastReading) {
 
     lastReading = reading;
@@ -143,17 +132,11 @@ bool buttonPressed(
   }
 
 
-  // Проверяем, было ли оно стабильным 50 мс
-
   if (now - debounceStart >= DEBOUNCE_TIME) {
 
     if (reading != stableState) {
 
       stableState = reading;
-
-
-      // INPUT_PULLUP:
-      // LOW означает нажатие
 
       if (stableState == LOW) {
         return true;
@@ -164,7 +147,6 @@ bool buttonPressed(
   return false;
 }
 
-//проверка на две кнопки
 void readButtons() {
   bool servicePressed = buttonPressed(
     SERVICE_BUTTON_PIN,
@@ -177,9 +159,6 @@ void readButtons() {
   if (servicePressed) {
 
     serviceMode = !serviceMode;
-
-    // Старый запрос пешехода при переходе
-    // в сервисный режим больше не нужен
     pedRequest = false;
 
 
